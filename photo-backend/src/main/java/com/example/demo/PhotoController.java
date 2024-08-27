@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/photos")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://photo-frontend-1c10f276a77f.herokuapp.com")
 public class PhotoController {
     @Autowired
     private PhotoService photoService;
@@ -25,7 +25,7 @@ public class PhotoController {
             return ResponseEntity.ok("Photo uploaded successfully: " + photo.getId());
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Could not upload the photo: " + e.getMessage());
+                    .body("Could not upload the photo: " + e.getMessage());
         }
     }
 
@@ -36,16 +36,16 @@ public class PhotoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok()
-            .contentType(MediaType.parseMediaType(photo.getFileType()))
-            .body(photo.getData());
+                .contentType(MediaType.parseMediaType(photo.getFileType()))
+                .body(photo.getData());
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<PhotoDTO>> getAllPhotos() {
         List<Photo> photos = photoService.getAllPhotos();
         List<PhotoDTO> photoDTOs = photos.stream()
-            .map(photo -> new PhotoDTO(photo.getId(), photo.getFileName()))
-            .collect(Collectors.toList());
+                .map(photo -> new PhotoDTO(photo.getId(), photo.getFileName()))
+                .collect(Collectors.toList());
         return ResponseEntity.ok(photoDTOs);
     }
 }
